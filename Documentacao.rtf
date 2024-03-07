@@ -1,0 +1,170 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang22 Vou resumir o projeto que desenvolvemos, focando em um sistema SaaS integrado com a Hotmart para a entrega automatizada de materiais digitais (e-books, cursos, etc.) al\'e9m de oferecer funcionalidades como o gerenciamento de vendas, produtos e entreg\'e1veis. Este sistema visa expandir as possibilidades oferecidas pela plataforma Hotmart, permitindo entregas personalizadas e automatizadas baseadas em webhooks.\par
+\par
+Vis\'e3o Geral do Projeto\par
+O sistema permite que vendedores (usu\'e1rios) configurem produtos digitais e definam entreg\'e1veis espec\'edficos para cada produto. Quando uma venda ocorre na Hotmart, um webhook \'e9 disparado para nossa API, que ent\'e3o processa a venda e automatiza a entrega do conte\'fado digital ao comprador, seja por e-mail ou atrav\'e9s de acesso a um painel exclusivo.\par
+\par
+Arquitetura do Projeto\par
+Backend: Node.js com Express.\par
+Banco de Dados: MySQL para armazenamento de usu\'e1rios, produtos, vendas, entreg\'e1veis, acessos ao painel e gerenciamento de dom\'ednios.\par
+Frontend: (discutido conceitualmente) pode ser desenvolvido com React para proporcionar uma interface amig\'e1vel para configura\'e7\'e3o e monitoramento pelo vendedor.\par
+Funcionalidades Principais\par
+Autentica\'e7\'e3o de Usu\'e1rios: Sistema de login/logout para vendedores.\par
+Gerenciamento de Produtos: Cria\'e7\'e3o, atualiza\'e7\'e3o e remo\'e7\'e3o de produtos digitais, cada um com seus pr\'f3prios entreg\'e1veis.\par
+Configura\'e7\'e3o de Entreg\'e1veis: Defini\'e7\'e3o de itens digitais ou informa\'e7\'f5es de acesso que ser\'e3o entregues automaticamente aos compradores.\par
+Webhooks da Hotmart: Integra\'e7\'e3o para receber notifica\'e7\'f5es de eventos de venda, cancelamento, entre outros.\par
+Envio Autom\'e1tico: Envio de materiais digitais ou informa\'e7\'f5es de acesso via e-mail ou disponibiliza\'e7\'e3o em um painel exclusivo para o comprador.\par
+Gerenciamento de Vendas: Visualiza\'e7\'e3o e gest\'e3o das vendas realizadas.\par
+Controle de Acesso: Administra\'e7\'e3o de acessos aos pain\'e9is de conte\'fado por parte dos compradores.\par
+Personaliza\'e7\'e3o de Dom\'ednio: Configura\'e7\'e3o de subdom\'ednios personalizados ou dom\'ednios pr\'f3prios para os pain\'e9is de acesso.\par
+Banco de Dados\par
+Modelamos o banco de dados para suportar as seguintes entidades: Usu\'e1rios, Produtos, Entreg\'e1veis, Vendas, AcessosPainel e GerenciamentoDominio, com rela\'e7\'f5es adequadas para representar as vendas dos produtos, os itens entreg\'e1veis associados, e o controle de acesso ao conte\'fado.\par
+\par
+Implementa\'e7\'e3o\par
+Rotas API: Criamos rotas espec\'edficas para cada uma das funcionalidades principais, protegidas quando necess\'e1rio atrav\'e9s de autentica\'e7\'e3o JWT.\par
+Middleware de Autentica\'e7\'e3o: Desenvolvemos um middleware para validar tokens JWT, garantindo que apenas usu\'e1rios autenticados possam acessar rotas protegidas.\par
+Valida\'e7\'f5es: Implementamos valida\'e7\'f5es de entrada de dados para todas as rotas usando a biblioteca Joi, para assegurar a integridade e corre\'e7\'e3o dos dados recebidos pela API.\par
+Testes: Introduzimos testes de unidade e integra\'e7\'e3o para as rotas utilizando Jest e Supertest, assegurando a confiabilidade do sistema.\par
+Pr\'f3ximos Passos\par
+Frontend: Desenvolvimento da interface de usu\'e1rio com React.\par
+Expans\'e3o da API: Adi\'e7\'e3o de mais endpoints conforme necess\'e1rio, para suportar novas funcionalidades.\par
+Melhorias de Seguran\'e7a: Implementa\'e7\'e3o de medidas de seguran\'e7a adicionais, como rate limiting, sanitiza\'e7\'e3o de entrada de dados, e HTTPS.\par
+Documenta\'e7\'e3o da API: Cria\'e7\'e3o de documenta\'e7\'e3o detalhada usando ferramentas como Swagger.\par
+Este resumo fornece uma vis\'e3o geral do projeto e das etapas principais que seguimos para constru\'ed-lo. Para detalhes espec\'edficos de implementa\'e7\'e3o, cada se\'e7\'e3o do projeto pode ser expandida em documenta\'e7\'f5es t\'e9cnicas mais detalhadas.\par
+\par
+\par
+POST /login\par
+Descri\'e7\'e3o: Autentica um usu\'e1rio e retorna um token JWT.\par
+Corpo da Solicita\'e7\'e3o: \{ "email": "email@example.com", "senha": "senha123" \}\par
+Respostas:\par
+200 OK: Token gerado com sucesso. \{ "token": "<JWT Token>" \}\par
+401 Unauthorized: Falha na autentica\'e7\'e3o.\par
+Usu\'e1rios\par
+POST /usuarios\par
+\par
+Descri\'e7\'e3o: Cadastra um novo usu\'e1rio.\par
+Corpo da Solicita\'e7\'e3o: \{ "nome": "Nome", "email": "email@example.com", "senha": "senha123" \}\par
+Respostas:\par
+201 Created: Usu\'e1rio criado.\par
+400 Bad Request: Erro de valida\'e7\'e3o.\par
+GET /usuarios\par
+\par
+Descri\'e7\'e3o: Lista todos os usu\'e1rios.\par
+Respostas:\par
+200 OK: Lista de usu\'e1rios.\par
+GET /usuarios/:id\par
+\par
+Descri\'e7\'e3o: Retorna detalhes de um usu\'e1rio espec\'edfico.\par
+Respostas:\par
+200 OK: Detalhes do usu\'e1rio.\par
+404 Not Found: Usu\'e1rio n\'e3o encontrado.\par
+PUT /usuarios/:id\par
+\par
+Descri\'e7\'e3o: Atualiza um usu\'e1rio espec\'edfico.\par
+Corpo da Solicita\'e7\'e3o: \{ "nome": "Novo Nome", "email": "novoemail@example.com" \}\par
+Respostas:\par
+200 OK: Usu\'e1rio atualizado.\par
+404 Not Found: Usu\'e1rio n\'e3o encontrado.\par
+DELETE /usuarios/:id\par
+\par
+Descri\'e7\'e3o: Deleta um usu\'e1rio espec\'edfico.\par
+Respostas:\par
+204 No Content: Usu\'e1rio deletado.\par
+404 Not Found: Usu\'e1rio n\'e3o encontrado.\par
+Produtos\par
+POST /produtos\par
+\par
+Descri\'e7\'e3o: Cria um novo produto.\par
+Corpo da Solicita\'e7\'e3o: \{ "nomeProduto": "Nome", "descricao": "Descri\'e7\'e3o", "preco": 100, "tipoConteudo": "e-book", "IDHotmart": "abc123" \}\par
+Respostas:\par
+201 Created: Produto criado.\par
+GET /produtos\par
+\par
+Descri\'e7\'e3o: Lista todos os produtos.\par
+Respostas:\par
+200 OK: Lista de produtos.\par
+GET /produtos/:id\par
+\par
+Descri\'e7\'e3o: Retorna detalhes de um produto espec\'edfico.\par
+Respostas:\par
+200 OK: Detalhes do produto.\par
+404 Not Found: Produto n\'e3o encontrado.\par
+PUT /produtos/:id\par
+\par
+Descri\'e7\'e3o: Atualiza um produto espec\'edfico.\par
+Corpo da Solicita\'e7\'e3o: \{ "nomeProduto": "Novo Nome", "descricao": "Nova Descri\'e7\'e3o", "preco": 150, "tipoConteudo": "v\'eddeo" \}\par
+Respostas:\par
+200 OK: Produto atualizado.\par
+404 Not Found: Produto n\'e3o encontrado.\par
+DELETE /produtos/:id\par
+\par
+Descri\'e7\'e3o: Deleta um produto espec\'edfico.\par
+Respostas:\par
+204 No Content: Produto deletado.\par
+404 Not Found: Produto n\'e3o encontrado.\par
+Entreg\'e1veis\par
+POST /entregaveis\par
+\par
+Descri\'e7\'e3o: Associa um entreg\'e1vel a um produto.\par
+Corpo da Solicita\'e7\'e3o: \{ "tipo": "link", "conteudo": "{{\field{\*\fldinst{HYPERLINK http://exemplo.com }}{\fldrslt{http://exemplo.com\ul0\cf0}}}}\f0\fs22 ", "produtoId": 1 \}\par
+Respostas:\par
+201 Created: Entreg\'e1vel criado.\par
+GET /entregaveis\par
+\par
+Descri\'e7\'e3o: Lista todos os entreg\'e1veis.\par
+Respostas:\par
+200 OK: Lista de entreg\'e1veis.\par
+GET /entregaveis/:id\par
+\par
+Descri\'e7\'e3o: Retorna detalhes de um entreg\'e1vel espec\'edfico.\par
+Respostas:\par
+200 OK: Detalhes do entreg\'e1vel.\par
+404 Not Found: Entreg\'e1vel n\'e3o encontrado.\par
+PUT /entregaveis/:id\par
+\par
+Descri\'e7\'e3o: Atualiza um entreg\'e1vel espec\'edfico.\par
+Corpo da Solicita\'e7\'e3o: \{ "tipo": "arquivo", "conteudo": "{{\field{\*\fldinst{HYPERLINK http://novolink.com }}{\fldrslt{http://novolink.com\ul0\cf0}}}}\f0\fs22 ", "produtoId": 2 \}\par
+Respostas:\par
+200 OK: Entreg\'e1vel atualizado.\par
+404 Not Found: Entreg\'e1vel n\'e3o encontrado.\par
+DELETE /entregaveis/:id\par
+\par
+Descri\'e7\'e3o: Deleta um entreg\'e1vel espec\'edfico.\par
+Respostas:\par
+204 No Content: Entreg\'e1vel deletado.\par
+404 Not Found: Entreg\'e1vel n\'e3o encontrado.\par
+Gerenciamento de Dom\'ednio\par
+POST /dominios\par
+\par
+Descri\'e7\'e3o: Configura um novo dom\'ednio ou subdom\'ednio para o vendedor.\par
+Corpo da Solicita\'e7\'e3o: \{ "nomeDom\'ednio": "exemplo.com", "tipoDom\'ednio": "dom\'ednio pr\'f3prio" \}\par
+Respostas:\par
+201 Created: Dom\'ednio configurado.\par
+GET /dominios\par
+\par
+Descri\'e7\'e3o: Lista todos os dom\'ednios configurados.\par
+Respostas:\par
+200 OK: Lista de dom\'ednios.\par
+GET /dominios/:id\par
+\par
+Descri\'e7\'e3o: Retorna detalhes de um dom\'ednio espec\'edfico.\par
+Respostas:\par
+200 OK: Detalhes do dom\'ednio.\par
+404 Not Found: Dom\'ednio n\'e3o encontrado.\par
+PUT /dominios/:id\par
+\par
+Descri\'e7\'e3o: Atualiza a configura\'e7\'e3o de um dom\'ednio espec\'edfico.\par
+Corpo da Solicita\'e7\'e3o: \{ "nomeDom\'ednio": "novoexemplo.com", "tipoDom\'ednio": "subdom\'ednio" \}\par
+Respostas:\par
+200 OK: Dom\'ednio atualizado.\par
+404 Not Found: Dom\'ednio n\'e3o encontrado.\par
+DELETE /dominios/:id\par
+\par
+Descri\'e7\'e3o: Remove a configura\'e7\'e3o de um dom\'ednio espec\'edfico.\par
+Respostas:\par
+204 No Content: Dom\'ednio removido.\par
+404 Not Found: Dom\'ednio n\'e3o encontrado.\par
+}
+ 
